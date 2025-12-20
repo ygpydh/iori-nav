@@ -171,7 +171,6 @@ export async function onRequest(context) {
   let layoutEnableBgBlur = false;
   let layoutBgBlurIntensity = '0';
   let layoutCardStyle = 'style1';
-  let layoutCardPadding = '20';
   let layoutCardBorderRadius = '12';
   let wallpaperSource = 'bing';
   let wallpaperCid360 = '36';
@@ -188,7 +187,7 @@ export async function onRequest(context) {
         'layout_random_wallpaper', 'bing_country',
         'layout_enable_frosted_glass', 'layout_frosted_glass_intensity',
         'layout_enable_bg_blur', 'layout_bg_blur_intensity', 'layout_card_style',
-        'layout_card_padding', 'layout_card_border_radius',
+        'layout_card_border_radius',
         'wallpaper_source', 'wallpaper_cid_360'
     ];
     const placeholders = keys.map(() => '?').join(',');
@@ -228,7 +227,6 @@ export async function onRequest(context) {
         if (row.key === 'layout_enable_bg_blur') layoutEnableBgBlur = row.value === 'true';
         if (row.key === 'layout_bg_blur_intensity') layoutBgBlurIntensity = row.value;
         if (row.key === 'layout_card_style') layoutCardStyle = row.value;
-        if (row.key === 'layout_card_padding') layoutCardPadding = row.value;
         if (row.key === 'layout_card_border_radius') layoutCardBorderRadius = row.value;
         if (row.key === 'wallpaper_source') wallpaperSource = row.value;
         if (row.key === 'wallpaper_cid_360') wallpaperCid360 = row.value;
@@ -654,7 +652,7 @@ export async function onRequest(context) {
   }
 
   // Inject Card CSS Variables
-  const cardCssVars = `<style>:root { --card-padding: ${layoutCardPadding}px; --card-radius: ${layoutCardBorderRadius}px; }</style>`;
+  const cardCssVars = `<style>:root { --card-padding: 1.25rem; --card-radius: ${layoutCardBorderRadius}px; }</style>`;
   html = html.replace('</head>', `${cardCssVars}</head>`);
 
   // Inject Layout Config for Client-side JS

@@ -1793,8 +1793,6 @@ const initSettings = () => {
   const cardStyle1Preview = document.getElementById('cardStyle1Preview');
   const cardStyle2Preview = document.getElementById('cardStyle2Preview');
   
-  const cardPaddingInput = document.getElementById('cardPadding');
-  const cardPaddingValue = document.getElementById('cardPaddingValue');
   const cardRadiusInput = document.getElementById('cardRadius');
   const cardRadiusValue = document.getElementById('cardRadiusValue');
 
@@ -1828,21 +1826,25 @@ const initSettings = () => {
       const hideCategory = hideCategorySwitch.checked;
       const enableFrosted = frostedGlassSwitch.checked;
       const frostedIntensity = frostedGlassIntensityRange.value;
-      const padding = document.getElementById('cardPadding').value;
       const radius = document.getElementById('cardRadius').value;
 
       [cardStyle1Preview, cardStyle2Preview].forEach(card => {
           if (!card) return;
           
           // Apply dynamic styles
-          card.style.setProperty('--card-padding', padding + 'px');
           card.style.setProperty('--card-radius', radius + 'px');
           
           const desc = card.querySelector('.preview-desc');
           const links = card.querySelector('.preview-links');
           const category = card.querySelector('.preview-category');
 
-          if (desc) desc.style.display = hideDesc ? 'none' : 'block';
+          if (desc) {
+              if (hideDesc) {
+                  desc.style.setProperty('display', 'none', 'important');
+              } else {
+                  desc.style.removeProperty('display');
+              }
+          }
           if (links) links.style.display = hideLinks ? 'none' : 'flex'; 
           if (category) category.style.display = hideCategory ? 'none' : 'inline-flex';
           
@@ -1890,12 +1892,6 @@ const initSettings = () => {
   if (frostedGlassSwitch) frostedGlassSwitch.addEventListener('change', updatePreviewCards);
   if (frostedGlassIntensityRange) frostedGlassIntensityRange.addEventListener('input', updatePreviewCards);
   
-  if (cardPaddingInput) {
-      cardPaddingInput.addEventListener('input', () => {
-          if (cardPaddingValue) cardPaddingValue.textContent = cardPaddingInput.value;
-          updatePreviewCards();
-      });
-  }
   if (cardRadiusInput) {
       cardRadiusInput.addEventListener('input', () => {
           if (cardRadiusValue) cardRadiusValue.textContent = cardRadiusInput.value;
@@ -1955,7 +1951,6 @@ const initSettings = () => {
     wallpaper_source: 'bing',
     wallpaper_cid_360: '36',
     layout_card_style: 'style1',
-    layout_card_padding: '20',
     layout_card_border_radius: '12'
   };
 
@@ -2383,7 +2378,6 @@ const initSettings = () => {
     currentSettings.layout_enable_frosted_glass = frostedGlassSwitch.checked;
     currentSettings.layout_frosted_glass_intensity = frostedGlassIntensityRange.value;
     
-    currentSettings.layout_card_padding = cardPaddingInput.value;
     currentSettings.layout_card_border_radius = cardRadiusInput.value;
     
     // layout_card_style is already updated by click listeners
@@ -2485,7 +2479,6 @@ const initSettings = () => {
             if (serverSettings.wallpaper_source) currentSettings.wallpaper_source = serverSettings.wallpaper_source;
             if (serverSettings.wallpaper_cid_360) currentSettings.wallpaper_cid_360 = serverSettings.wallpaper_cid_360;
             if (serverSettings.layout_card_style) currentSettings.layout_card_style = serverSettings.layout_card_style;
-            if (serverSettings.layout_card_padding) currentSettings.layout_card_padding = serverSettings.layout_card_padding;
             if (serverSettings.layout_card_border_radius) currentSettings.layout_card_border_radius = serverSettings.layout_card_border_radius;
 
         } else {
@@ -2671,10 +2664,6 @@ const initSettings = () => {
         }
     }
     
-    if (cardPaddingInput) {
-        cardPaddingInput.value = currentSettings.layout_card_padding || '20';
-        if (cardPaddingValue) cardPaddingValue.textContent = currentSettings.layout_card_padding || '20';
-    }
     if (cardRadiusInput) {
         cardRadiusInput.value = currentSettings.layout_card_border_radius || '12';
         if (cardRadiusValue) cardRadiusValue.textContent = currentSettings.layout_card_border_radius || '12';
